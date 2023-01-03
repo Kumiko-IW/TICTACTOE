@@ -103,6 +103,7 @@ public class Tictactoe {
 	}//End Of checkAddressメソッド
 	
 	//3つ揃ったか確認するメソッド
+//アレイリストだけを書いたデータクラスを用意して、クラス名.リスト名でアクセスして、呼び出しのたびに初期化されないようにする
 	//配列の要素を全て比較して、差が同等のものが２つ以上揃えば上がり。
 	private static boolean game_record(String input_str) {
 		
