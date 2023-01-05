@@ -1,12 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 public class Tictactoe {
-	
-	public static List<Integer> add_li_ci  = new ArrayList<>();
-	public static List<Integer> res_li_ci  = new ArrayList<>();
-	public static List<Integer> add_li_cr  = new ArrayList<>();
-	public static List<Integer> res_li_cr  = new ArrayList<>();
 	
 	public static void main(String args[]) {
 		//  ゲームボードに番地振ります
@@ -20,24 +13,23 @@ public class Tictactoe {
 			//奇数なら”○”の番。それ以外は”×”の番
 			if(i % 2 != 0 ){
 				//入力受付メソッドの戻り値を受け取り、判定メソッドへ渡す
-				String ci_inp_str = input_Number(circle, gameboard);
+				input_Number(circle, gameboard);
 				//判定メソッドを呼び出し、勝敗がつけばgame_endsメソッドにTRUEを返す
-				game_ends = game_record(ci_inp_str, add_li_ci, res_li_ci);
+				game_ends = game_record(circle, gameboard);
 				if(game_ends) {
-					System.out.println("○の勝ちです");
 					break;
 				}//End Of break文
 			}else {
 				//入力受付メソッドの戻り値を受け取り、判定メソッドへ渡す
-				String cr_inp_str = input_Number(cross, gameboard);
+				input_Number(cross, gameboard);
 				//判定メソッドを呼び出し、勝敗がつけばgame_endsメソッドにTRUEを返す
-				game_ends = game_record(cr_inp_str, add_li_cr, res_li_cr);
+				game_ends = game_record(cross, gameboard);
 				if(game_ends) {
-					System.out.println("×の勝ちです");
 					break;
 				}//End Of break文
 				if (i==9) {
 					System.out.println("あいこです");
+					display_board(gameboard);
 				}
 			}//End Of If-else文
 		} //End Of for文
@@ -45,7 +37,7 @@ public class Tictactoe {
 	}   //　メインメソッドここまで	
 
 	//  入力受付と入力値バリデーションを行うメソッド。入力値を戻り値にする。
-	private static String input_Number(String flag, String gameboard[][]) {
+	private static void input_Number(String flag, String gameboard[][]) {
 		//  入力値の検証がtrue（空き番地として存在する２桁の数字のみ）になるまで再入力を促す
 		boolean valideted = false;
 		while(!valideted) {
@@ -59,10 +51,10 @@ public class Tictactoe {
 			//入力値のバリデーション＆アドレス空き確認のメソッド呼び出し
 			valideted = checkAddress(input_Number, input_arr,gameboard, valideted, flag);
 			if(valideted == true){
-			return input_Number;
+			//return input_Number;
 			} // End Of if valideted = true
 		}     // End Of while
-		return null;
+		//return null;
 	}   // End Of turn
 
 	//gameboadを表示させるメソッド
@@ -113,30 +105,17 @@ public class Tictactoe {
 	
 	//3つ揃ったか確認するメソッド
 	//配列の要素を全て比較して、差が同等のものが２つ以上揃えば上がり。
-	private static boolean game_record(String inp_str, List<Integer> add_li, List<Integer> res_li) {
-		
-		add_li.add((Integer.parseInt(inp_str)));
-		
-		//新しく受け取った入力値（input_str）をすでにある配列の数値と比較をしてその差分をリストに格納していく
-		if(add_li.size() > 1) {
-			for(int i=0 ; i < add_li.size()-1 ; i++) {
-				res_li.add(Integer.parseInt(inp_str) - add_li.get(i));	
-			}
-		}
-		//result_listの要素を順に比較して、同じ数が２つあればWIN
-		//int result =0 ;
-		if(res_li.size() > 1) {
-			for (int i = 0; i < res_li.size(); i++) {
-			    for (int k = 0; k < res_li.size(); k++) {
-			        if (k != i && res_li.get(k) == res_li.get(i)) { 
-			           //result++;
-			            //if(result >= 1) {
-			            	return true;
-			            //}//End Of result >= 2
-			        } //End Of k != iのループ
-			    }	//End Of Kのループ
-			}//End Of iのループ
-		}//End of if文
-		return false;
+	private static boolean game_record(String cc ,String gameboard[][]) {
+		if( gameboard[0][0] == cc && gameboard[0][1] == cc && gameboard[0][2] == cc ||
+			gameboard[0][0] == cc && gameboard[1][1] == cc && gameboard[2][2] == cc ||
+			gameboard[0][0] == cc && gameboard[1][0] == cc && gameboard[2][0] == cc ||
+			gameboard[1][0] == cc && gameboard[1][1] == cc && gameboard[1][2] == cc ||
+			gameboard[2][0] == cc && gameboard[2][1] == cc && gameboard[2][2] == cc ||	
+			gameboard[2][0] == cc && gameboard[1][1] == cc && gameboard[0][2] == cc   ) {
+			System.out.println(cc+"の勝ちです");
+			display_board(gameboard);
+			return true; 	
+		} else {return false;
+		}//End of if-else文
 	}//End Of game_recordメソッド
 }//End Of Class
