@@ -2,6 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class Tictactoe {
+	
+	public static List<Integer> add_li_ci  = new ArrayList<>();
+	public static List<Integer> res_li_ci  = new ArrayList<>();
+	public static List<Integer> add_li_cr  = new ArrayList<>();
+	public static List<Integer> res_li_cr  = new ArrayList<>();
+	
 	public static void main(String args[]) {
 		//  ゲームボードに番地振ります
 		String[][] gameboard = {{"11","12","13"},{"21","22","23"},{"31","32","33"}};
@@ -11,28 +17,31 @@ public class Tictactoe {
 		//回数が９になるか、game_endsフラグがTRUEになるまで○と×に交互に入力を促す
 		boolean game_ends = false;
 		for(int i = 1; i <= 9; i++) {
-			//偶数なら”○”の番。それ以外は”×”の番
-			if(i % 2 == 0 ){
+			//奇数なら”○”の番。それ以外は”×”の番
+			if(i % 2 != 0 ){
 				//入力受付メソッドの戻り値を受け取り、判定メソッドへ渡す
-				String circle_input_str = input_Number(circle, gameboard);
+				String ci_inp_str = input_Number(circle, gameboard);
 				//判定メソッドを呼び出し、勝敗がつけばgame_endsメソッドにTRUEを返す
-				game_ends = game_record(circle_input_str);
+				game_ends = game_record(ci_inp_str, add_li_ci, res_li_ci);
 				if(game_ends) {
 					System.out.println("○の勝ちです");
 					break;
 				}//End Of break文
 			}else {
 				//入力受付メソッドの戻り値を受け取り、判定メソッドへ渡す
-				String cross_input_str = input_Number(cross, gameboard);
+				String cr_inp_str = input_Number(cross, gameboard);
 				//判定メソッドを呼び出し、勝敗がつけばgame_endsメソッドにTRUEを返す
-				game_ends = game_record(cross_input_str);
+				game_ends = game_record(cr_inp_str, add_li_cr, res_li_cr);
 				if(game_ends) {
 					System.out.println("×の勝ちです");
 					break;
 				}//End Of break文
+				if (i==9) {
+					System.out.println("あいこです");
+				}
 			}//End Of If-else文
 		} //End Of for文
-		System.out.println("あいこです");
+		//System.out.println("あいこです");
 	}   //　メインメソッドここまで	
 
 	//  入力受付と入力値バリデーションを行うメソッド。入力値を戻り値にする。
@@ -103,30 +112,31 @@ public class Tictactoe {
 	}//End Of checkAddressメソッド
 	
 	//3つ揃ったか確認するメソッド
-//アレイリストだけを書いたデータクラスを用意して、クラス名.リスト名でアクセスして、呼び出しのたびに初期化されないようにする
 	//配列の要素を全て比較して、差が同等のものが２つ以上揃えば上がり。
-	private static boolean game_record(String input_str) {
+	private static boolean game_record(String inp_str, List<Integer> add_li, List<Integer> res_li) {
 		
-		List<Integer> address_list = new ArrayList<>();
-		address_list.add((Integer.parseInt(input_str)));
+		add_li.add((Integer.parseInt(inp_str)));
 		
-		List<Integer>result_list = new ArrayList<>();
 		//新しく受け取った入力値（input_str）をすでにある配列の数値と比較をしてその差分をリストに格納していく
-		for(int i=0 ; i < address_list.size() ; i++) {
-			result_list.add( Integer.parseInt(input_str) - address_list.get(i));	
+		if(add_li.size() > 1) {
+			for(int i=0 ; i < add_li.size()-1 ; i++) {
+				res_li.add(Integer.parseInt(inp_str) - add_li.get(i));	
+			}
 		}
 		//result_listの要素を順に比較して、同じ数が２つあればWIN
-		int result =0 ;
-		for (int i = 0; i < result_list.size(); i++) {
-		    for (int k = 0; k < result_list.size(); k++) {
-		        if (k != i && result_list.get(k) == result_list.get(i)) { 
-		            result++;
-		            if(result >= 2) {
-		            	return true;
-		            }//End Of result >= 2
-		        } //End Of k != iのループ
-		    }	//End Of Kのループ
-		}//End Of iのループ
+		//int result =0 ;
+		if(res_li.size() > 1) {
+			for (int i = 0; i < res_li.size(); i++) {
+			    for (int k = 0; k < res_li.size(); k++) {
+			        if (k != i && res_li.get(k) == res_li.get(i)) { 
+			           //result++;
+			            //if(result >= 1) {
+			            	return true;
+			            //}//End Of result >= 2
+			        } //End Of k != iのループ
+			    }	//End Of Kのループ
+			}//End Of iのループ
+		}//End of if文
 		return false;
 	}//End Of game_recordメソッド
 }//End Of Class
